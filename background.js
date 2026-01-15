@@ -436,9 +436,11 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === 'reminderTriggered') {
     (async () => {
       try {
-        await recordReminder(request.type, request.action, request.name);
+        // 使用 actionType 而不是 action，因为 action 是消息类型
+        await recordReminder(request.type, request.actionType, request.name);
         sendResponse({ success: true });
       } catch (error) {
+        console.error('Error in reminderTriggered handler:', error);
         sendResponse({ success: false, error: error.message });
       }
     })();

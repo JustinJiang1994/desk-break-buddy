@@ -116,11 +116,11 @@ function closeNotification() {
 }
 
 // 记录提醒
-function recordReminder(type, action, name = null) {
+function recordReminder(type, actionType, name = null) {
   const message = {
     action: 'reminderTriggered',
     type: type,
-    action: action
+    actionType: actionType  // 使用 actionType 避免与 action 冲突
   };
   
   if (name) {
@@ -129,7 +129,7 @@ function recordReminder(type, action, name = null) {
   
   chrome.runtime.sendMessage(message, (response) => {
     if (chrome.runtime.lastError) {
-      console.error('Error recording reminder:', chrome.runtime.lastError);
+      console.error('Error recording reminder:', chrome.runtime.lastError.message || chrome.runtime.lastError);
     }
     // 忽略响应
   });
