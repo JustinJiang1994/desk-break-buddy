@@ -63,17 +63,15 @@ function setupEventListeners() {
     }
   });
   
-  // 输入验证
+  // 输入验证（只验证最小值）
   document.getElementById('activityInterval').addEventListener('input', (e) => {
     const value = parseInt(e.target.value);
-    if (value < 10) e.target.value = 10;
-    if (value > 120) e.target.value = 120;
+    if (value < 1) e.target.value = 1;
   });
   
   document.getElementById('waterInterval').addEventListener('input', (e) => {
     const value = parseInt(e.target.value);
-    if (value < 5) e.target.value = 5;
-    if (value > 60) e.target.value = 60;
+    if (value < 1) e.target.value = 1;
   });
   
   // 自定义计时器相关事件
@@ -97,14 +95,25 @@ async function saveSettings() {
   currentSettings.soundEnabled = document.getElementById('soundEnabled').checked;
   currentSettings.soundType = document.getElementById('soundType').value;
   
-  // 验证范围
-  if (currentSettings.activityReminderInterval < 10 || currentSettings.activityReminderInterval > 120) {
-    alert('起身提醒间隔必须在10-120分钟之间');
+  // 验证最小值（至少1分钟）
+  if (currentSettings.activityReminderInterval < 1) {
+    alert('起身提醒间隔至少为1分钟');
     return;
   }
   
-  if (currentSettings.waterReminderInterval < 5 || currentSettings.waterReminderInterval > 60) {
-    alert('喝水提醒间隔必须在5-60分钟之间');
+  if (currentSettings.waterReminderInterval < 1) {
+    alert('喝水提醒间隔至少为1分钟');
+    return;
+  }
+  
+  // 验证是否为有效数字
+  if (isNaN(currentSettings.activityReminderInterval) || currentSettings.activityReminderInterval <= 0) {
+    alert('请输入有效的起身提醒间隔');
+    return;
+  }
+  
+  if (isNaN(currentSettings.waterReminderInterval) || currentSettings.waterReminderInterval <= 0) {
+    alert('请输入有效的喝水提醒间隔');
     return;
   }
   

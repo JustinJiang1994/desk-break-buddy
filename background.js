@@ -173,7 +173,7 @@ async function showActivityReminder() {
     url: chrome.runtime.getURL('notification.html?type=activity'),
     type: 'popup',
     width: 400,
-    height: 250,
+    height: 350,
     focused: true
   });
   
@@ -205,7 +205,7 @@ async function showWaterReminder() {
     url: chrome.runtime.getURL('notification.html?type=water'),
     type: 'popup',
     width: 400,
-    height: 250,
+    height: 350,
     focused: true
   });
 }
@@ -219,7 +219,7 @@ async function showCustomReminder(timer) {
     url: chrome.runtime.getURL(`notification.html?type=custom&id=${timer.id}&name=${encodeURIComponent(timer.name)}`),
     type: 'popup',
     width: 400,
-    height: 250,
+    height: 350,
     focused: true
   });
 }
