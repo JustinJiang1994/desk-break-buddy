@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>提醒</title>
+  <link rel="stylesheet" href="notification.css">
+</head>
+<body>
+  <div class="container">
+    <div id="activityReminder" class="reminder-content hidden">
+      <div class="icon">🏃</div>
+      <h2>该起身活动啦！</h2>
+      <p>拉伸一下，走动30秒吧～</p>
+      <div class="countdown">
+        <span id="countdown">30</span> 秒后自动关闭
+      </div>
+    </div>
+    
+    <div id="waterReminder" class="reminder-content hidden">
+      <div class="icon">💧</div>
+      <h2>喝水时间到！</h2>
+      <p>记得补充水分哦～</p>
+      <button id="skipBtn" class="btn">跳过</button>
+    </div>
+    
+    <div id="customReminder" class="reminder-content hidden">
+      <div class="icon">⏰</div>
+      <h2 id="customTitle">提醒时间到！</h2>
+      <p id="customMessage">该做点什么了～</p>
+      <button id="customSkipBtn" class="btn">跳过</button>
+    </div>
+  </div>
+  
+  <script src="notification.js"></script>
+</body>
+</html>

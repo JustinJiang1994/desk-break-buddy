@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>desk-break-buddy 设置</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>桌面休息伙伴 - 设置</h1>
+    </div>
+    
+    <div class="settings-section">
+      <h2>提醒时间设置</h2>
+      
+      <div class="setting-item">
+        <label for="activityInterval">起身活动提醒间隔（分钟）</label>
+        <div class="input-group">
+          <input type="number" id="activityInterval" min="10" max="120" value="60">
+          <span class="input-hint">范围：10-120分钟</span>
+        </div>
+      </div>
+      
+      <div class="setting-item">
+        <label for="waterInterval">喝水提醒间隔（分钟）</label>
+        <div class="input-group">
+          <input type="number" id="waterInterval" min="5" max="60" value="30">
+          <span class="input-hint">范围：5-60分钟</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="settings-section">
+      <h2>声音设置</h2>
+      
+      <div class="setting-item">
+        <label class="switch-label">
+          <input type="checkbox" id="soundEnabled">
+          <span>启用声音提醒</span>
+        </label>
+      </div>
+      
+      <div class="setting-item">
+        <label for="soundType">提醒音效</label>
+        <select id="soundType">
+          <option value="default">默认音效</option>
+          <option value="gentle">轻柔音效</option>
+          <option value="alert">提示音效</option>
+        </select>
+      </div>
+    </div>
+    
+    <div class="settings-section">
+      <h2>自定义计时器</h2>
+      <div id="customTimersList" class="custom-timers-list">
+        <!-- 自定义计时器列表将在这里动态生成 -->
+      </div>
+      <button id="addTimerBtn" class="btn btn-secondary btn-add">+ 添加计时器</button>
+      
+      <div id="timerForm" class="timer-form hidden">
+        <h3 id="timerFormTitle">添加计时器</h3>
+        <div class="form-group">
+          <label for="timerName">计时器名称</label>
+          <input type="text" id="timerName" placeholder="例如：眼保健操、休息" maxlength="20">
+        </div>
+        <div class="form-group">
+          <label for="timerInterval">提醒间隔（分钟）</label>
+          <input type="number" id="timerInterval" min="5" max="480" value="60">
+          <span class="input-hint">范围：5-480分钟</span>
+        </div>
+        <div class="form-actions">
+          <button id="saveTimerBtn" class="btn btn-primary">保存</button>
+          <button id="cancelTimerBtn" class="btn btn-secondary">取消</button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="settings-section">
+      <h2>提醒记录</h2>
+      <div id="reminderHistory" class="history-container">
+        <p class="empty-message">暂无记录</p>
+      </div>
+    </div>
+    
+    <div class="actions-section">
+      <button id="saveBtn" class="btn btn-primary">保存设置</button>
+      <button id="resetBtn" class="btn btn-secondary">恢复默认设置</button>
+    </div>
+    
+    <div id="saveMessage" class="save-message hidden">设置已保存！</div>
+  </div>
+  
+  <script src="options.js"></script>
+</body>
+</html>

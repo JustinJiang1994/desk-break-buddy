@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>desk-break-buddy</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>桌面休息伙伴</h1>
+    </div>
+    
+    <div class="status-section">
+      <div class="status-item">
+        <span class="status-label">起身提醒：</span>
+        <span id="activityStatus" class="status-value">--</span>
+      </div>
+      <div class="status-item">
+        <span class="status-label">喝水提醒：</span>
+        <span id="waterStatus" class="status-value">--</span>
+      </div>
+    </div>
+    
+    <div class="controls-section">
+      <div class="control-item">
+        <label class="switch">
+          <input type="checkbox" id="activityToggle">
+          <span class="slider"></span>
+        </label>
+        <span class="control-label">起身活动提醒</span>
+      </div>
+      
+      <div class="control-item">
+        <label class="switch">
+          <input type="checkbox" id="waterToggle">
+          <span class="slider"></span>
+        </label>
+        <span class="control-label">喝水提醒</span>
+      </div>
+    </div>
+    
+    <div class="actions-section">
+      <button id="pauseBtn" class="btn btn-secondary">暂停提醒</button>
+      <button id="settingsBtn" class="btn btn-primary">进入设置</button>
+    </div>
+    
+    <div id="pauseMenu" class="pause-menu hidden">
+      <div class="pause-options">
+        <button class="pause-option" data-minutes="15">15分钟</button>
+        <button class="pause-option" data-minutes="30">30分钟</button>
+        <button class="pause-option" data-minutes="60">1小时</button>
+        <button class="pause-option" data-minutes="custom">自定义</button>
+      </div>
+      <div id="customPauseInput" class="custom-pause-input hidden">
+        <input type="number" id="customMinutes" placeholder="输入分钟数" min="1" max="480">
+        <button id="confirmCustomPause" class="btn btn-small">确认</button>
+      </div>
+    </div>
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>
