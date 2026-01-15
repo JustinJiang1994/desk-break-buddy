@@ -301,8 +301,15 @@ async function saveTimer() {
     return;
   }
   
-  if (interval < 5 || interval > 480) {
-    alert('提醒间隔必须在5-480分钟之间');
+  // 验证最小值（至少1分钟）
+  if (interval < 1) {
+    alert('提醒间隔至少为1分钟');
+    return;
+  }
+  
+  // 验证是否为有效数字
+  if (isNaN(interval) || interval <= 0) {
+    alert('请输入有效的提醒间隔');
     return;
   }
   

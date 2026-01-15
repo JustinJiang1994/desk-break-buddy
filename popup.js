@@ -189,11 +189,13 @@ function setupEventListeners() {
   // 自定义暂停确认
   document.getElementById('confirmCustomPause').addEventListener('click', async () => {
     const minutes = parseInt(document.getElementById('customMinutes').value);
-    if (minutes > 0 && minutes <= 480) {
+    if (minutes > 0) {
       await pauseReminders(minutes);
       document.getElementById('pauseMenu').classList.add('hidden');
       document.getElementById('customPauseInput').classList.add('hidden');
       document.getElementById('customMinutes').value = '';
+    } else {
+      alert('请输入有效的分钟数（至少1分钟）');
     }
   });
   
