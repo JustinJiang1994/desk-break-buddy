@@ -115,9 +115,10 @@ function updateCustomTimersStatus(customAlarms) {
   const now = Date.now();
   const isPaused = currentSettings.pauseUntil && new Date() < new Date(currentSettings.pauseUntil);
   
-  timers.forEach(timer => {
-    if (!timer.enabled) return;
-    
+  // 获取启用的计时器
+  const enabledTimers = timers.filter(timer => timer.enabled);
+  
+  enabledTimers.forEach((timer, index) => {
     const statusItem = document.createElement('div');
     statusItem.className = 'status-item custom-timer-status';
     
@@ -145,6 +146,8 @@ function updateCustomTimersStatus(customAlarms) {
     
     statusSection.appendChild(statusItem);
   });
+  
+  // 确保最后一个status-item没有分割线（通过CSS的:not(:last-child)选择器）
 }
 
 // HTML转义

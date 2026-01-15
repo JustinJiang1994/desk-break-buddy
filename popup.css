@@ -40,7 +40,7 @@ body {
   padding: 8px 0;
 }
 
-.status-item:first-child {
+.status-item:not(:last-child) {
   border-bottom: 1px solid #eee;
   padding-bottom: 12px;
   margin-bottom: 8px;
