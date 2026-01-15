@@ -164,16 +164,55 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
   }
 });
 
+// 计算窗口居中位置
+async function getCenteredWindowPosition(width, height) {
+  return new Promise((resolve) => {
+    // 获取所有窗口来估算屏幕尺寸
+    chrome.windows.getAll({ populate: false }, (windows) => {
+      let maxRight = 0;
+      let maxBottom = 0;
+      
+      // 从所有窗口中找到最大的右边界和底边界，估算屏幕尺寸
+      windows.forEach(win => {
+        if (win.left !== undefined && win.width !== undefined) {
+          maxRight = Math.max(maxRight, win.left + win.width);
+        }
+        if (win.top !== undefined && win.height !== undefined) {
+          maxBottom = Math.max(maxBottom, win.top + win.height);
+        }
+      });
+      
+      // 如果找到了窗口，使用估算的屏幕尺寸
+      // 否则使用常见的屏幕分辨率作为默认值
+      const screenWidth = maxRight > 0 ? maxRight : 1920;
+      const screenHeight = maxBottom > 0 ? maxBottom : 1080;
+      
+      // 计算居中位置
+      const left = Math.max(0, Math.round((screenWidth - width) / 2));
+      const top = Math.max(0, Math.round((screenHeight - height) / 2));
+      
+      resolve({ left, top });
+    });
+  });
+}
+
 // 显示起身活动提醒
 async function showActivityReminder() {
   updateIcon('active');
+  
+  // 计算居中位置
+  const windowWidth = 400;
+  const windowHeight = 350;
+  const position = await getCenteredWindowPosition(windowWidth, windowHeight);
   
   // 创建提醒窗口（音效在notification.html中播放）
   chrome.windows.create({
     url: chrome.runtime.getURL('notification.html?type=activity'),
     type: 'popup',
-    width: 400,
-    height: 350,
+    width: windowWidth,
+    height: windowHeight,
+    left: position.left,
+    top: position.top,
     focused: true
   });
   
@@ -200,12 +239,19 @@ async function showActivityReminder() {
 async function showWaterReminder() {
   updateIcon('active');
   
+  // 计算居中位置
+  const windowWidth = 400;
+  const windowHeight = 350;
+  const position = await getCenteredWindowPosition(windowWidth, windowHeight);
+  
   // 创建提醒窗口（音效在notification.html中播放）
   chrome.windows.create({
     url: chrome.runtime.getURL('notification.html?type=water'),
     type: 'popup',
-    width: 400,
-    height: 350,
+    width: windowWidth,
+    height: windowHeight,
+    left: position.left,
+    top: position.top,
     focused: true
   });
 }
@@ -214,12 +260,19 @@ async function showWaterReminder() {
 async function showCustomReminder(timer) {
   updateIcon('active');
   
+  // 计算居中位置
+  const windowWidth = 400;
+  const windowHeight = 350;
+  const position = await getCenteredWindowPosition(windowWidth, windowHeight);
+  
   // 创建提醒窗口
   chrome.windows.create({
     url: chrome.runtime.getURL(`notification.html?type=custom&id=${timer.id}&name=${encodeURIComponent(timer.name)}`),
     type: 'popup',
-    width: 400,
-    height: 350,
+    width: windowWidth,
+    height: windowHeight,
+    left: position.left,
+    top: position.top,
     focused: true
   });
 }
