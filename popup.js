@@ -25,6 +25,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 async function loadSettings() {
   return new Promise((resolve) => {
     chrome.runtime.sendMessage({ action: 'getSettings' }, (response) => {
+      if (chrome.runtime.lastError) {
+        console.error('Error loading settings:', chrome.runtime.lastError);
+        updateUI();
+        resolve();
+        return;
+      }
       if (response && response.settings) {
         currentSettings = { ...DEFAULT_SETTINGS, ...response.settings };
         if (!currentSettings.customTimers) {
@@ -47,6 +53,11 @@ function updateUI() {
 async function updateStatus() {
   return new Promise((resolve) => {
     chrome.runtime.sendMessage({ action: 'getNextReminderTimes' }, (response) => {
+      if (chrome.runtime.lastError) {
+        console.error('Error getting reminder times:', chrome.runtime.lastError);
+        resolve();
+        return;
+      }
       if (response) {
         const now = Date.now();
         const isPaused = currentSettings.pauseUntil && new Date() < new Date(currentSettings.pauseUntil);
@@ -199,6 +210,11 @@ async function saveSettings() {
       action: 'updateSettings',
       settings: currentSettings
     }, (response) => {
+      if (chrome.runtime.lastError) {
+        console.error('Error saving settings:', chrome.runtime.lastError);
+        resolve();
+        return;
+      }
       if (response && response.success) {
         updateStatus();
       }
@@ -214,6 +230,11 @@ async function pauseReminders(minutes) {
       action: 'pauseReminders',
       minutes: minutes
     }, (response) => {
+      if (chrome.runtime.lastError) {
+        console.error('Error pausing reminders:', chrome.runtime.lastError);
+        resolve();
+        return;
+      }
       if (response && response.success) {
         loadSettings();
         updateStatus();

@@ -339,36 +339,60 @@ function updateIcon(state) {
 
 // 监听来自popup和options的消息
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  // 处理异步消息时，返回true保持消息通道开放
   if (request.action === 'getSettings') {
     chrome.storage.sync.get(['settings'], (result) => {
-      sendResponse({ settings: result.settings || DEFAULT_SETTINGS });
+      if (chrome.runtime.lastError) {
+        sendResponse({ settings: DEFAULT_SETTINGS });
+      } else {
+        sendResponse({ settings: result.settings || DEFAULT_SETTINGS });
+      }
     });
-    return true;
+    return true; // 保持消息通道开放
   }
   
   if (request.action === 'updateSettings') {
-    chrome.storage.sync.set({ settings: request.settings }, async () => {
-      await initializeAlarms();
-      sendResponse({ success: true });
-    });
-    return true;
+    (async () => {
+      try {
+        await chrome.storage.sync.set({ settings: request.settings });
+        await initializeAlarms();
+        sendResponse({ success: true });
+      } catch (error) {
+        sendResponse({ success: false, error: error.message });
+      }
+    })();
+    return true; // 保持消息通道开放
   }
   
   if (request.action === 'pauseReminders') {
-    chrome.storage.sync.get(['settings'], async (result) => {
-      const currentSettings = { ...DEFAULT_SETTINGS, ...result.settings };
-      const pauseMinutes = request.minutes;
-      const pauseUntil = new Date(Date.now() + pauseMinutes * 60 * 1000);
-      currentSettings.pauseUntil = pauseUntil.toISOString();
-      await chrome.storage.sync.set({ settings: currentSettings });
-      await initializeAlarms();
-      sendResponse({ success: true });
-    });
-    return true;
+    (async () => {
+      try {
+        const result = await chrome.storage.sync.get(['settings']);
+        const currentSettings = { ...DEFAULT_SETTINGS, ...result.settings };
+        const pauseMinutes = request.minutes;
+        const pauseUntil = new Date(Date.now() + pauseMinutes * 60 * 1000);
+        currentSettings.pauseUntil = pauseUntil.toISOString();
+        await chrome.storage.sync.set({ settings: currentSettings });
+        await initializeAlarms();
+        sendResponse({ success: true });
+      } catch (error) {
+        sendResponse({ success: false, error: error.message });
+      }
+    })();
+    return true; // 保持消息通道开放
   }
   
   if (request.action === 'getNextReminderTimes') {
     chrome.alarms.getAll((alarms) => {
+      if (chrome.runtime.lastError) {
+        sendResponse({
+          activity: null,
+          water: null,
+          custom: {}
+        });
+        return;
+      }
+      
       const activityAlarm = alarms.find(a => a.name === 'activityReminder');
       const waterAlarm = alarms.find(a => a.name === 'waterReminder');
       const customAlarms = {};
@@ -387,7 +411,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         custom: customAlarms
       });
     });
-    return true;
+    return true; // 保持消息通道开放
   }
   
   if (request.action === 'closeNotification') {
@@ -410,9 +434,17 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
   
   if (request.action === 'reminderTriggered') {
-    recordReminder(request.type, request.action).then(() => {
-      sendResponse({ success: true });
-    });
-    return true;
+    (async () => {
+      try {
+        await recordReminder(request.type, request.action, request.name);
+        sendResponse({ success: true });
+      } catch (error) {
+        sendResponse({ success: false, error: error.message });
+      }
+    })();
+    return true; // 保持消息通道开放
   }
+  
+  // 如果消息未匹配，返回false
+  return false;
 });

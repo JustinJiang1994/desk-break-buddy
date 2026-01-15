@@ -22,8 +22,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 async function playSound() {
   try {
     // 获取设置
-    const response = await new Promise((resolve) => {
-      chrome.runtime.sendMessage({ action: 'getSettings' }, resolve);
+    const response = await new Promise((resolve, reject) => {
+      chrome.runtime.sendMessage({ action: 'getSettings' }, (response) => {
+        if (chrome.runtime.lastError) {
+          reject(chrome.runtime.lastError);
+          return;
+        }
+        resolve(response);
+      });
     });
     
     if (response && response.settings && response.settings.soundEnabled) {
@@ -101,7 +107,10 @@ function showCustomReminder(timerId, timerName) {
 
 // 关闭提醒窗口
 function closeNotification() {
-  chrome.runtime.sendMessage({ action: 'closeNotification' }, () => {
+  chrome.runtime.sendMessage({ action: 'closeNotification' }, (response) => {
+    if (chrome.runtime.lastError) {
+      console.error('Error closing notification:', chrome.runtime.lastError);
+    }
     window.close();
   });
 }
@@ -118,7 +127,10 @@ function recordReminder(type, action, name = null) {
     message.name = name;
   }
   
-  chrome.runtime.sendMessage(message, () => {
+  chrome.runtime.sendMessage(message, (response) => {
+    if (chrome.runtime.lastError) {
+      console.error('Error recording reminder:', chrome.runtime.lastError);
+    }
     // 忽略响应
   });
 }

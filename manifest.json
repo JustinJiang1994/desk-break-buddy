@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "desk-break-buddy",
+  "name": "桌面休息伙伴",
   "version": "1.0.0",
-  "description": "桌面休息伙伴 - 定时提醒您起身活动和补充水分，养成健康的办公习惯",
+  "description": "定时提醒您起身活动和补充水分，养成健康的办公习惯",
   "permissions": [
     "storage",
     "notifications",

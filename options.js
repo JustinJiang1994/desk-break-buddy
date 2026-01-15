@@ -25,6 +25,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 async function loadSettings() {
   return new Promise((resolve) => {
     chrome.runtime.sendMessage({ action: 'getSettings' }, (response) => {
+      if (chrome.runtime.lastError) {
+        console.error('Error loading settings:', chrome.runtime.lastError);
+        updateUI();
+        resolve();
+        return;
+      }
       if (response && response.settings) {
         currentSettings = { ...DEFAULT_SETTINGS, ...response.settings };
         if (!currentSettings.reminderHistory) {
@@ -122,6 +128,12 @@ async function saveSettings() {
       action: 'updateSettings',
       settings: currentSettings
     }, (response) => {
+      if (chrome.runtime.lastError) {
+        console.error('Error saving settings:', chrome.runtime.lastError);
+        alert('保存设置失败，请重试');
+        resolve();
+        return;
+      }
       if (response && response.success) {
         showSaveMessage();
       }
