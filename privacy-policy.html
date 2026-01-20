@@ -261,12 +261,8 @@
       <li><strong>访问</strong>：不访问任何网站或数据</li>
     </ul>
     
-    <h3>notifications（通知权限）</h3>
-    <ul>
-      <li><strong>用途</strong>：显示提醒弹窗</li>
-      <li><strong>范围</strong>：仅显示插件内部的提醒窗口</li>
-      <li><strong>访问</strong>：不发送任何其他通知</li>
-    </ul>
+    <h3>关于提醒弹窗</h3>
+    <p>本插件使用 <code>chrome.windows.create</code> API 创建提醒弹窗窗口，该API不需要额外权限，是Chrome扩展的标准功能。提醒弹窗仅用于显示插件内部的提醒信息，不发送任何系统通知。</p>
     
     <h2>数据保留</h2>
     <ul>

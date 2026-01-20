@@ -5,7 +5,6 @@
   "description": "定时提醒您起身活动和补充水分，养成健康的办公习惯",
   "permissions": [
     "storage",
-    "notifications",
     "alarms"
   ],
   "background": {
